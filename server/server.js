@@ -9,6 +9,7 @@ const userRoutes = require('./routes/userRoutes');
 const scanRoutes = require('./routes/scanRoutes');
 
 const app = express();
+//new routes 
 
 app.use(express.json()); 
 
