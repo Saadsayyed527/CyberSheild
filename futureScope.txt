@@ -1,0 +1,38 @@
+make a ai generated short summary 
+ 
+o auth authentications with firebase or google auth 
+
+generate a pdf use with jpdf
+
+store on  blockchain 
+pinata 
+
+create a chatbot 
+using rag pipeline and gemini api 
+
+
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const API_KEY = process.env.GEMINI_API_KEY;
+const genAI = new GoogleGenerativeAI(API_KEY);
+
+async function runQuery() {
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const prompt = "Explain how AI works in simple terms.";
+    const result = await model.generateContent({ contents: [{ parts: [{ text: prompt }] }] });
+
+    // ✅ Properly extract the response
+    const responseText = await result.response.text();
+    console.log("AI Response:", responseText);
+
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+runQuery();

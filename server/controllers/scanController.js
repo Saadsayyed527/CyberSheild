@@ -6,19 +6,26 @@ const { performSecurityScan } = require("../services/securityScanner");
 exports.startScan = async (req, res) => {
     const { url, userId } = req.body;
     try {
-        const scan = new Scan({ url, userId, status: "In Progress", report: null });
-        await scan.save();
-
-        const report = await scanReportGenerator.generate(url);
-        scan.status = "Completed";
-        scan.report = report;
-        await scan.save();
-
-        res.status(201).json({ message: "Scan completed", scan });
+      if (!url || !userId) {
+        console.error("Missing URL or userId");
+        return res.status(400).json({ error: "URL and userId are required" });
+      }
+  
+      const scan = new Scan({ url, userId, status: "In Progress", report: null });
+      await scan.save();
+  
+      const report = await scanReportGenerator.generate(url);
+      scan.status = "Completed";
+      scan.report = report;
+      await scan.save();
+  
+      res.status(201).json({ message: "Scan completed", scan });
     } catch (err) {
-        res.status(500).json({ error: "Error starting scan" });
+      console.error("Error in startScan:", err); // 👈 See this in terminal
+      res.status(500).json({ error: "Error starting scan" });
     }
-};
+  };
+  
 
 // Function to get scan report by ID
 exports.getScanReport = async (req, res) => {
