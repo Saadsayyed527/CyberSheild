@@ -12,14 +12,48 @@ const Register = () => {
   });
 
   const [message, setMessage] = useState('');
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    
+    // Name validation: required
+    if (!formData.name) {
+      newErrors.name = 'Full Name is required.';
+    }
+
+    // Email validation: required and valid email format
+    if (!formData.email) {
+      newErrors.email = 'Email is required.';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address.';
+    }
+
+    // Username validation: required and between 3 and 20 characters
+    if (!formData.username) {
+      newErrors.username = 'Username is required.';
+    } else if (formData.username.length < 3 || formData.username.length > 20) {
+      newErrors.username = 'Username must be between 3 and 20 characters.';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate form before submission
+    if (!validateForm()) {
+      setMessage('Please fix the errors in the form.');
+      return;
+    }
+
     try {
       const res = await axios.post('/api/users/register', formData);
       const { user, token } = res.data;
@@ -46,13 +80,12 @@ const Register = () => {
         
         {/* Left Side: Image */}
         <div className="w-50 d-none d-md-flex align-items-center justify-content-center">
-        <img
-  src="/register.jpeg"
-  alt="Register"
-  className="img-fluid rounded p-3"
-  style={{ transform: 'scale(1.9)', transformOrigin: 'center' }}
-/>
-
+          <img
+            src="/register.jpeg"
+            alt="Register"
+            className="img-fluid rounded p-3"
+            style={{ transform: 'scale(1.9)', transformOrigin: 'center' }}
+          />
         </div>
 
         {/* Divider */}
@@ -78,10 +111,11 @@ const Register = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="form-control"
+                className={`form-control ${errors.name ? 'is-invalid' : ''}`}
                 placeholder="Full Name"
                 required
               />
+              {errors.name && <div className="invalid-feedback">{errors.name}</div>}
             </div>
             <div className="mb-3">
               <label className="form-label fw-bold">Email</label>
@@ -90,10 +124,11 @@ const Register = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="form-control"
+                className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                 placeholder="Email"
                 required
               />
+              {errors.email && <div className="invalid-feedback">{errors.email}</div>}
             </div>
             <div className="mb-3">
               <label className="form-label fw-bold">Username</label>
@@ -102,17 +137,16 @@ const Register = () => {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
-                className="form-control"
+                className={`form-control ${errors.username ? 'is-invalid' : ''}`}
                 placeholder="Username"
                 required
               />
+              {errors.username && <div className="invalid-feedback">{errors.username}</div>}
             </div>
             <div className="d-grid">
               <button type="submit" className="btn btn-primary">Register</button>
             </div>
           </form>
-
-        
         </div>
       </div>
     </div>

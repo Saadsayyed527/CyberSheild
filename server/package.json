@@ -9,10 +9,14 @@
     "express-rate-limit": "^7.5.0",
     "form-data": "^4.0.2",
     "helmet": "^8.0.0",
+    "jsdom": "^26.1.0", 
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.12.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
-    "pdfkit": "^0.15.0"
+    "node-fetch": "^2.7.0",
+    "pdfkit": "^0.15.0",
+    "ssl-checker": "^2.0.10",
+    "whois-json": "^2.0.4"
   }
 }

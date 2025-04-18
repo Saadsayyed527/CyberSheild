@@ -23,6 +23,17 @@ const FakePaymentPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Extra validation just in case (optional but good practice)
+    if (formData.cardNumber.length < 6) {
+      alert('Card number must be at least 6 digits.');
+      return;
+    }
+    if (formData.cvv.length < 4) {
+      alert('CVV must be at least 4 digits.');
+      return;
+    }
+
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);
@@ -55,8 +66,10 @@ const FakePaymentPage = () => {
               value={formData.cardNumber}
               onChange={handleChange}
               className="form-control"
+              minLength="6"
               maxLength="16"
               pattern="\d*"
+              title="Card number must be at least 6 digits"
               required
             />
           </div>
@@ -65,12 +78,11 @@ const FakePaymentPage = () => {
             <div className="col">
               <label className="form-label">Expiry Date</label>
               <input
-                type="text"
+                type="month"
                 name="expiry"
                 value={formData.expiry}
                 onChange={handleChange}
                 className="form-control"
-                placeholder="MM/YY"
                 required
               />
             </div>
@@ -82,8 +94,10 @@ const FakePaymentPage = () => {
                 value={formData.cvv}
                 onChange={handleChange}
                 className="form-control"
-                maxLength="3"
-                pattern="\d*"
+                minLength="4"
+                maxLength="4"
+                pattern="\d{4}"
+                title="CVV must be 4 digits"
                 required
               />
             </div>

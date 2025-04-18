@@ -3,6 +3,6 @@ const reportController = require('../controllers/reportController');
 const authMiddleware = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.get('/report/:id', authMiddleware, reportController.generateReport);
+router.get('/report/generateReport', authMiddleware, reportController.generateReport);
 
 module.exports = router;
