@@ -3,6 +3,7 @@ import Register from './components/Register';
 import ScanPage from './components/ScanPage'; // your scan page component
 import ExcessiveScanPage from './components/ExcessiveScanPage';
 import FakePaymentPage from './components/FakePaymentPage';
+import PdfFeedbackUploader from './components/PdfFeedbackUploader';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/scan" element={<ScanPage />} />
         <Route path="/excessive-scan" element={<ExcessiveScanPage />} /> {/* <-- New Route */}
         <Route path="/payment" element={<FakePaymentPage />} />
+        <Route path="/ai-upload" element={<PdfFeedbackUploader></PdfFeedbackUploader>} />
 
       </Routes>
     </BrowserRouter>

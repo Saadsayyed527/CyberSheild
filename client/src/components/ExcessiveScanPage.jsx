@@ -3,12 +3,14 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ExcessiveScanPage.css';
+import { useNavigate } from 'react-router-dom';
 
 const ExcessiveScanPage = () => {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState(null);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const websites = [
     "https://www.google.co.in/",
@@ -144,20 +146,19 @@ const ExcessiveScanPage = () => {
 
     setLoading(false);
   };
-
   const handleGenerateReport = () => {
     if (!report) return;
-
+  
     const doc = new jsPDF();
-
+  
     doc.setFontSize(18);
     doc.text('Excessive Security Scan Report', 20, 20);
-
+  
     doc.setFontSize(12);
     doc.text(`SSL Valid: ${report.ssl.valid ? '✅ Yes' : '✅ No'}`, 20, 40);
     doc.text(`SSL Expiry: N/A`, 20, 50);
     doc.text(`Open Ports: ${report.openPorts.join(', ')}`, 20, 60);
-
+  
     doc.text('Outdated Libraries:', 20, 75);
     if (report.outdatedLibraries.length > 0) {
       report.outdatedLibraries.forEach((lib, i) => {
@@ -166,17 +167,21 @@ const ExcessiveScanPage = () => {
     } else {
       doc.text('None found', 25, 85);
     }
-
+  
     const yOffset = 100 + report.outdatedLibraries.length * 8;
-
+  
     doc.text('Security Headers:', 20, yOffset);
     doc.text(`Content-Security-Policy: ${report.headers["Content-Security-Policy"]}`, 25, yOffset + 10);
     doc.text(`X-Frame-Options: ${report.headers["X-Frame-Options"]}`, 25, yOffset + 20);
     doc.text(`Strict-Transport-Security: ${report.headers["Strict-Transport-Security"]}`, 25, yOffset + 30);
-
+  
+    
     doc.save('scan-report.pdf');
+  
+    // Redirect to PDF Feedback Upload page
+    navigate('/ai-upload');
   };
-
+  
   return (
     <div className="container py-5">
       <div className="text-center mb-5">
@@ -246,6 +251,7 @@ const ExcessiveScanPage = () => {
             <button className="btn btn-outline-success" onClick={handleGenerateReport}>
               📄 Generate Report (PDF)
             </button>
+            
           </div>
         </div>
       )}
